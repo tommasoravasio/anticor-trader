@@ -2,7 +2,7 @@
 
 
 
-\### ⚠️ Running the Code
+\### Running the Code
 
 \- \*\*ANTICOR 1\*\* takes more than \*\*8 hours\*\* to run.  
 
@@ -18,7 +18,7 @@ Please avoid running these versions on local machines unless strictly necessary.
 
 
 
-\### 🔑 WRDS Connection
+\### WRDS Connection
 
 To connect to \*\*WRDS\*\* (since the HPCs do not allow direct login), a file named `wrds\_credentials.txt` must be created in your working directory with the following content:
 
@@ -42,7 +42,7 @@ Do \*\*not\*\* commit or push this file to GitHub, as it contains confidential i
 
 
 
-\### 🚫 About Code Modifications
+\### About Code Modifications
 
 If you choose to modify the code to connect to WRDS using a different method, do \*\*not\*\* push these changes to GitHub.  
 
@@ -54,7 +54,7 @@ This will prevent merge conflicts when the code is deployed on the HPCs.
 
 
 
-\### 📊 Data Selection Notes
+\### Data Selection Notes
 
 Please refer to the notebook \*\*`Gathering datas.ipynb`\*\*.  
 
@@ -72,7 +72,7 @@ If you have ideas for alternative portfolio compositions that may add value, you
 
 
 
-\### 🗣️ Language
+\### Language
 
 Most of the code and documentation are currently written in \*\*French\*\*.  
 
