@@ -20,7 +20,7 @@ Please avoid running these versions on local machines unless strictly necessary.
 
 \### WRDS Connection
 
-To connect to \*\*WRDS\*\* (since the HPCs do not allow direct login), a file named `wrds\_credentials.txt` must be created in your working directory with the following content:
+To connect to \*\*WRDS\*\* (since the HPCs do not allow direct login), a file named `wrds_credentials.txt` must be created in your working directory with the following content:
 
 
 
