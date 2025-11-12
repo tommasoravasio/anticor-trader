@@ -1,6 +1,8 @@
 # ANTICOR Algorithm Replication and Analysis
 
 This repository contains the Python implementation, backtesting engine, and critical analysis of the ANTICOR portfolio selection algorithm (Borodin et al., 2004).
+Start by reading the NOTES:
+[Important Notes for Collaborators](./NOTES.md)
 
 ## Project Objectives
 
