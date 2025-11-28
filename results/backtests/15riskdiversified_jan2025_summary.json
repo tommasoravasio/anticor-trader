@@ -1,0 +1,44 @@
+{
+  "dataset_id": "15riskdiversified_jan2025",
+  "equity_curve_file": "results/backtests/15riskdiversified_jan2025_equity.csv",
+  "Anticor (w=30)": {
+    "Cumulative Return": 1.6759729385375977,
+    "Annualized Return": 0.22628089206905444,
+    "Annualized Volatility": 0.6393878514002299,
+    "Sharpe Ratio": 0.3539023951948879,
+    "Max Drawdown": -0.6435168034540273,
+    "Calmar Ratio": 0.35163167590109384
+  },
+  "ANTI\u00b9 (smoothed)": {
+    "Cumulative Return": 3.1424069524910383,
+    "Annualized Return": 0.34250995007487983,
+    "Annualized Volatility": 0.5062237772050141,
+    "Sharpe Ratio": 0.6765979108408567,
+    "Max Drawdown": -0.4760691087087879,
+    "Calmar Ratio": 0.7194542636968148
+  },
+  "ANTI\u00b2 (composed)": {
+    "Cumulative Return": 4.036926746368408,
+    "Annualized Return": 0.42254904724457854,
+    "Annualized Volatility": 0.5866432497722145,
+    "Sharpe Ratio": 0.7202828080075045,
+    "Max Drawdown": -0.6346177279369143,
+    "Calmar Ratio": 0.6658324037342099
+  },
+  "EWP": {
+    "Cumulative Return": 1.708727072131889,
+    "Annualized Return": 0.2293764894332273,
+    "Annualized Volatility": 0.18377488044783433,
+    "Sharpe Ratio": 1.248138422804401,
+    "Max Drawdown": -0.22906467708680608,
+    "Calmar Ratio": 1.0013612415077993
+  },
+  "Best Asset (GME)": {
+    "Cumulative Return": 32.25154177554584,
+    "Annualized Return": 1.0684024204609144,
+    "Annualized Volatility": 1.6052970062805232,
+    "Sharpe Ratio": 0.6655481298980338,
+    "Max Drawdown": -0.884781456123549,
+    "Calmar Ratio": 1.2075325641903203
+  }
+}

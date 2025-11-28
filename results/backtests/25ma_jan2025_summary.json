@@ -1,0 +1,44 @@
+{
+  "dataset_id": "25ma_jan2025",
+  "equity_curve_file": "results/backtests/25ma_jan2025_equity.csv",
+  "Anticor (w=30)": {
+    "Cumulative Return": -0.40590769052505493,
+    "Annualized Return": -0.10229384536865205,
+    "Annualized Volatility": 0.683656916669104,
+    "Sharpe Ratio": -0.1496274562203591,
+    "Max Drawdown": -0.8866625483993953,
+    "Calmar Ratio": -0.11536953438860485
+  },
+  "ANTI\u00b9 (smoothed)": {
+    "Cumulative Return": 0.4744850823226967,
+    "Annualized Return": 0.08379838728381861,
+    "Annualized Volatility": 0.5099484836428353,
+    "Sharpe Ratio": 0.16432716239334966,
+    "Max Drawdown": -0.8093560784418137,
+    "Calmar Ratio": 0.10353710748073791
+  },
+  "ANTI\u00b2 (composed)": {
+    "Cumulative Return": 1.517979621887207,
+    "Annualized Return": 0.22300042105446516,
+    "Annualized Volatility": 0.5802907371033689,
+    "Sharpe Ratio": 0.3842908507683821,
+    "Max Drawdown": -0.84979968491321,
+    "Calmar Ratio": 0.26241527858090485
+  },
+  "EWP": {
+    "Cumulative Return": 1.6273524079263466,
+    "Annualized Return": 0.22162989975818337,
+    "Annualized Volatility": 0.21576733470555426,
+    "Sharpe Ratio": 1.0271707719828371,
+    "Max Drawdown": -0.2630603979618186,
+    "Calmar Ratio": 0.842505757139284
+  },
+  "Best Asset (AVGO)": {
+    "Cumulative Return": 8.354851631240457,
+    "Annualized Return": 0.5900114315767,
+    "Annualized Volatility": 0.4208626418030309,
+    "Sharpe Ratio": 1.401909727717845,
+    "Max Drawdown": -0.3874251576220359,
+    "Calmar Ratio": 1.5229042822053986
+  }
+}
