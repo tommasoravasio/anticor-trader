@@ -1,0 +1,44 @@
+{
+  "dataset_id": "sp500_top25_jan2025",
+  "equity_curve_file": "results/backtests/sp500_top25_jan2025_equity.csv",
+  "Anticor (w=30)": {
+    "Cumulative Return": 2.1953063011169434,
+    "Annualized Return": 0.2721946838232647,
+    "Annualized Volatility": 0.45418617546304046,
+    "Sharpe Ratio": 0.599302001091873,
+    "Max Drawdown": -0.5812218976044122,
+    "Calmar Ratio": 0.46831457132835735
+  },
+  "ANTI\u00b9 (smoothed)": {
+    "Cumulative Return": 3.7005521448589738,
+    "Annualized Return": 0.3781421327866783,
+    "Annualized Volatility": 0.35654461057490544,
+    "Sharpe Ratio": 1.060574530006072,
+    "Max Drawdown": -0.4437128024243675,
+    "Calmar Ratio": 0.8522227231681782
+  },
+  "ANTI\u00b2 (composed)": {
+    "Cumulative Return": 4.3442583084106445,
+    "Annualized Return": 0.4410346540677985,
+    "Annualized Volatility": 0.36990662938171476,
+    "Sharpe Ratio": 1.19228642861841,
+    "Max Drawdown": -0.473395986097692,
+    "Calmar Ratio": 0.9316400371353903
+  },
+  "EWP": {
+    "Cumulative Return": 2.5349499998929996,
+    "Annualized Return": 0.299107883457133,
+    "Annualized Volatility": 0.22331230338193062,
+    "Sharpe Ratio": 1.3394151550421713,
+    "Max Drawdown": -0.2594345762750608,
+    "Calmar Ratio": 1.1529222039394214
+  },
+  "Best Asset (NVDA)": {
+    "Cumulative Return": 17.947087789800094,
+    "Annualized Return": 0.8406523558370709,
+    "Annualized Volatility": 0.539620830167744,
+    "Sharpe Ratio": 1.5578574970424133,
+    "Max Drawdown": -0.6633519104057553,
+    "Calmar Ratio": 1.2672796183293804
+  }
+}
