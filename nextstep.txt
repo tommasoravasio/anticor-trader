@@ -1,0 +1,6 @@
+- translate first cell of each notebook in english
+- build final notebook for comparison across different datasets + comments on performance
+- clean up notebooks and repo (remove unnecessary comments, clean output)
+- do final presentation slides {xoxo francesco and sofia}
+
+
