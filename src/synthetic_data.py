@@ -228,6 +228,47 @@ def run_anti2_strategy(price_relatives: pd.DataFrame, max_W: int, permno_to_tick
     return anti1_results_on_experts
 
 
+def compute_equal_weight_buy_and_hold(
+    price_relatives: pd.DataFrame,
+    start_idx: int,
+    dtype=np.float32,
+) -> pd.DataFrame:
+    """
+    Equally-weighted Buy & Hold benchmark (no rebalancing after day 0).
+    Starts at `start_idx` to align with ANTICOR/ANTI¹/ANTI².
+    Returns DataFrame with `daily_profit` and `profit_cumule`.
+    """
+    dates = price_relatives.index
+    pr = price_relatives.to_numpy(dtype=dtype, copy=False)
+    n, m = pr.shape
+    if start_idx >= n:
+        raise ValueError("Not enough observations for benchmark from this start index.")
+
+    out_len = n - start_idx
+    daily_returns_history = np.empty(out_len, dtype=dtype)
+    dates_history = np.empty(out_len, dtype=object)
+
+    # Start with equal weights, then let them drift (no rebalancing)
+    b_t = np.full(m, 1.0 / m, dtype=dtype)
+
+    for k, t in enumerate(range(start_idx, n)):
+        day_ret = (b_t * pr[t]).sum() - 1.0
+        daily_returns_history[k] = day_ret
+        dates_history[k] = dates[t]
+
+        # Update weights according to asset growth; normalize to keep sum=1
+        b_t_reb = b_t * pr[t]
+        s = b_t_reb.sum()
+        if s <= 0:
+            b_t = np.full(m, 1.0 / m, dtype=dtype)
+        else:
+            b_t = b_t_reb / s
+
+    results_df = pd.DataFrame(daily_returns_history, index=pd.Index(dates_history), columns=["daily_profit"])
+    results_df["profit_cumule"] = (1 + results_df["daily_profit"]).cumprod()
+    return results_df
+
+
 # ---------------------------------------------------------------------------
 # Synthetic data generators
 # ---------------------------------------------------------------------------
@@ -363,10 +404,12 @@ class ExperimentRun:
     metrics_anticor: Dict[str, float]
     metrics_anti1: Dict[str, float]
     metrics_anti2: Dict[str, float]
+    metrics_benchmark: Dict[str, float]
     rank_churn: float
     equity_anticor: pd.Series
     equity_anti1: pd.Series
     equity_anti2: pd.Series
+    equity_benchmark: pd.Series
 
     def to_record(self) -> Dict[str, float]:
         rec = {
@@ -379,6 +422,7 @@ class ExperimentRun:
         rec.update({f"anticor_{k}": v for k, v in self.metrics_anticor.items()})
         rec.update({f"anti1_{k}": v for k, v in self.metrics_anti1.items()})
         rec.update({f"anti2_{k}": v for k, v in self.metrics_anti2.items()})
+        rec.update({f"benchmark_{k}": v for k, v in self.metrics_benchmark.items()})
         return rec
 
 
@@ -396,14 +440,19 @@ def run_single_scenario(
     anti1_df = run_anti1_strategy(df, max_W=W_max, permno_to_ticker=mapping)
     anti2_df = run_anti2_strategy(df, max_W=W_max, permno_to_ticker=mapping)
 
+    # Align benchmark start to the strictest start among strategies (2*W_max)
+    benchmark_df = compute_equal_weight_buy_and_hold(df, start_idx=2 * W_max)
+
     anticor_metrics = summarize_performance(anticor_df["daily_profit"])
     anti1_metrics = summarize_performance(anti1_df["daily_profit"])
     anti2_metrics = summarize_performance(anti2_df["daily_profit"])
+    benchmark_metrics = summarize_performance(benchmark_df["daily_profit"])
     rotation_score = float(df.pct_change().rank(axis=1).diff().abs().mean().mean())
 
     equity_anticor = (1 + anticor_df["daily_profit"]).cumprod()
     equity_anti1 = (1 + anti1_df["daily_profit"]).cumprod()
     equity_anti2 = (1 + anti2_df["daily_profit"]).cumprod()
+    equity_benchmark = (1 + benchmark_df["daily_profit"]).cumprod()
 
     if save_data_dir is not None:
         save_data_dir.mkdir(parents=True, exist_ok=True)
@@ -419,10 +468,12 @@ def run_single_scenario(
         metrics_anticor=anticor_metrics,
         metrics_anti1=anti1_metrics,
         metrics_anti2=anti2_metrics,
+        metrics_benchmark=benchmark_metrics,
         rank_churn=rotation_score,
         equity_anticor=equity_anticor,
         equity_anti1=equity_anti1,
         equity_anti2=equity_anti2,
+        equity_benchmark=equity_benchmark,
     )
 
 
@@ -436,6 +487,9 @@ def print_human_readable(run: ExperimentRun) -> None:
         print(f"  {k:<18}: {v:.4f}")
     print("ANTI² metrics:")
     for k, v in run.metrics_anti2.items():
+        print(f"  {k:<18}: {v:.4f}")
+    print("Benchmark (Equal-Weight B&H) metrics:")
+    for k, v in run.metrics_benchmark.items():
         print(f"  {k:<18}: {v:.4f}")
     print(f"Mean rank-change magnitude (rough churn proxy): {run.rank_churn:.4f}")
 
@@ -469,6 +523,7 @@ def sweep_scenarios(
                                 "ANTICOR": run.equity_anticor,
                                 "ANTI1": run.equity_anti1,
                                 "ANTI2": run.equity_anti2,
+                                "Benchmark": run.equity_benchmark,
                             },
                         )
                     )
@@ -491,6 +546,8 @@ def save_results_table(runs: List[ExperimentRun], out_dir: Path) -> None:
         "anti1_max_drawdown",
         "anti2_sharpe",
         "anti2_max_drawdown",
+        "benchmark_sharpe",
+        "benchmark_max_drawdown",
         "rank_churn",
     ]
     print("\nScenario summary (Sharpe, drawdown, churn):")
@@ -522,7 +579,8 @@ def plot_sample_equities(equity_sets: List[Tuple[str, Dict[str, pd.Series]]], ou
 def run_scenarios(num_assets: int = 25, num_days: int = 500, w: int = 30, W_max: int = 30) -> None:
     base_seed = 42
     scenarios = build_scenarios(num_assets=num_assets, num_days=num_days)
-
+    sample_equities: List[Tuple[str, Dict[str, pd.Series]]] = []
+    out_dir = Path("results/synthetic")
     for idx, scen in enumerate(scenarios):
         run = run_single_scenario(
             scen,
@@ -532,6 +590,19 @@ def run_scenarios(num_assets: int = 25, num_days: int = 500, w: int = 30, W_max:
             save_data_dir=Path("results/synthetic/data"),
         )
         print_human_readable(run)
+        # Collect curves for plotting in the quick run as well
+        sample_equities.append(
+            (
+                scen.name,
+                {
+                    "ANTICOR": run.equity_anticor,
+                    "ANTI1": run.equity_anti1,
+                    "ANTI2": run.equity_anti2,
+                    "Benchmark": run.equity_benchmark,
+                },
+            )
+        )
+    plot_sample_equities(sample_equities, out_dir)
 
 
 def main() -> None:
