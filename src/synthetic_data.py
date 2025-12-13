@@ -519,7 +519,7 @@ def plot_sample_equities(equity_sets: List[Tuple[str, Dict[str, pd.Series]]], ou
 # ---------------------------------------------------------------------------
 # Entry points
 # ---------------------------------------------------------------------------
-def run_scenarios(num_assets: int = 8, num_days: int = 500, w: int = 30, W_max: int = 30) -> None:
+def run_scenarios(num_assets: int = 25, num_days: int = 500, w: int = 30, W_max: int = 30) -> None:
     base_seed = 42
     scenarios = build_scenarios(num_assets=num_assets, num_days=num_days)
 
@@ -541,7 +541,7 @@ def main() -> None:
     # Richer sweep (small and fast) with exports + plots.
     seeds = [101, 202, 303]
     ws = [30]  # match main notebook window choice
-    scenarios = build_scenarios(num_assets=10, num_days=600)
+    scenarios = build_scenarios(num_assets=25, num_days=600)
     out_dir = Path("results/synthetic")
     runs, sample_equities = sweep_scenarios(
         scenarios=scenarios,
