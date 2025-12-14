@@ -336,42 +336,6 @@ def generate_choppy_blocks(num_assets: int, num_days: int, seed: int, block: int
     return pd.DataFrame(pr, index=_make_index(num_days), columns=cols)
 
 
-def generate_choppy_blocks_mean_reverting(
-    num_assets: int, num_days: int, seed: int, block: int = 30, phi: float = -0.3
-) -> pd.DataFrame:
-    """
-    Choppy blocks with explicit mean reversion for ANTICOR exploitation.
-    - AR(1) process with negative phi for intra-day mean reversion
-    - Block drifts alternate sign every 2 blocks for inter-block reversals
-    - High noise maintains rank churn but with exploitable structure
-    """
-    rng = np.random.default_rng(seed)
-    returns = np.zeros((num_days, num_assets))
-
-    # Base drifts per asset (persistent across inversions)
-    base_drifts = rng.normal(0, 0.002, size=num_assets)
-
-    for block_idx, start in enumerate(range(0, num_days, block)):
-        # Alternate sign every 2 blocks (creates mean-reverting cycles)
-        sign = 1 if (block_idx // 2) % 2 == 0 else -1
-        block_trend = sign * base_drifts
-
-        end = min(start + block, num_days)
-
-        for t in range(start, end):
-            shock = rng.normal(0, 0.012, size=num_assets)
-
-            if t == 0:
-                returns[t] = block_trend + shock
-            else:
-                # AR(1) with negative phi + block drift
-                returns[t] = phi * returns[t - 1] + block_trend + shock
-
-    pr = _clip_to_price_relatives(returns)
-    cols = [f"ChoppyMR_{i+1}" for i in range(num_assets)]
-    return pd.DataFrame(pr, index=_make_index(num_days), columns=cols)
-
-
 # ---------------------------------------------------------------------------
 # Evaluation helpers
 # ---------------------------------------------------------------------------
@@ -427,11 +391,6 @@ def build_scenarios(num_assets: int, num_days: int) -> List[Scenario]:
             "choppy_blocks",
             lambda seed: generate_choppy_blocks(num_assets, num_days, seed),
             "Block-level drifts with noise create frequent rank reshuffling.",
-        ),
-        Scenario(
-            "choppy_blocks_mean_reverting",
-            lambda seed: generate_choppy_blocks_mean_reverting(num_assets, num_days, seed),
-            "Choppy blocks with AR(1) mean reversion and alternating drift cycles (ANTICOR-friendly).",
         ),
     ]
 
