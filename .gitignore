@@ -6,3 +6,4 @@ __pycache__/
 .env
 data/
 wrds_credentials.txt
+TOMMASO_NOTES.md
