@@ -9,7 +9,10 @@ READ THE NOTES BEFORE TOUCHING THE CODE:
 
 - Ensure Python 3.10+ is available.
 - Install dependencies: `pip install -r requirements.txt`.
-- Create `wrds_credentials.txt` at the repo root with your WRDS credentials (username on first line, password on second).
+- Create `wrds_credentials.txt` at the repo root with your WRDS credentials:
+  1. First line: WRDS username
+  2. Second line: WRDS password
+- **Do not commit or push `wrds_credentials.txt`** to GitHub; it contains confidential information.
 
 ## Project Layout
 
