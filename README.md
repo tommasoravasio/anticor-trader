@@ -1,9 +1,11 @@
 # Anticor Trader
 
-Anticor Trader is a set of Jupyter notebooks and Python modules implementing and evaluating the ANTI² strategy across multiple portfolios and synthetic market scenarios.
+This project presents empirical results from backtesting the **ANTICOR algorithm** (Borodin et al., 2004) and its enhanced variants **ANTI¹** (smoothed) and **ANTI²** (composed) across multiple market scenarios. 
 
-READ THE NOTES BEFORE TOUCHING THE CODE:
-[Important Notes for Collaborators](./NOTES.md)
+The ANTICOR algorithm exploits negative correlations between assets to construct portfolios that transfer wealth from strong-performing to weak-performing assets, aiming to capture mean-reversion patterns. Using two consecutive time windows, it computes a claim matrix based on cross-correlations and relative performance, then rebalances the portfolio accordingly.
+
+This repository contains Jupyter notebooks and Python modules implementing and evaluating these strategies across multiple portfolios and synthetic market scenarios.
+
 
 ## Quick Start
 
@@ -12,12 +14,11 @@ READ THE NOTES BEFORE TOUCHING THE CODE:
 - Create `wrds_credentials.txt` at the repo root with your WRDS credentials:
   1. First line: WRDS username
   2. Second line: WRDS password
-- **Do not commit or push `wrds_credentials.txt`** to GitHub; it contains confidential information.
 
 ## Project Layout
 
-- `notebooks/00_algorithm_template.ipynb`: Core algorithm template (formerly V5_Optimized). Start here.
-- `notebooks/backtests/`: Portfolio-specific backtests (formerly V51–V57). Each notebook runs the same algorithm on a different universe and writes results to `results/backtests/`.
+- `notebooks/00_algorithm_template.ipynb`: Core algorithm template. Start here.
+- `notebooks/backtests/`: Portfolio-specific backtests. Each notebook runs the same algorithm on a different universe and writes results to `results/backtests/`.
     - `01_sp500_top25.ipynb`
     - `02_sp500_25diversified.ipynb`
     - `03_nyse_top25.ipynb`
@@ -52,14 +53,8 @@ READ THE NOTES BEFORE TOUCHING THE CODE:
 - Notebooks use `from src.persist_backtest import save_backtest_results` for standardized persistence.
 - Backtest notebooks reference WRDS credentials relative to their folder; keep `wrds_credentials.txt` at the repo root.
 
-## Common Tasks
-- Create a new portfolio run: duplicate `00_algorithm_template.ipynb` into `notebooks/backtests/`, adjust portfolio selection logic, and run.
-- Compare results: load CSVs/JSONs in `results/backtests/` or use the synthetic analysis notebook for aggregated views.
 
 ## Setup Notes
 - Dependencies are listed in `requirements.txt`.
 - If using environment variables or `.env`, ensure paths resolve from notebook locations.
 
-## Troubleshooting
-- Import errors: confirm you opened VS Code in the repo root so `src/` is importable.
-- File not found: verify relative paths from the notebook location (e.g., backtests use `../../wrds_credentials.txt`).
