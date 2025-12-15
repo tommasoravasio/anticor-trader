@@ -31,6 +31,8 @@ os.environ.setdefault("MPLCONFIGDIR", str(Path(__file__).resolve().parent / ".ma
 Path(os.environ["MPLCONFIGDIR"]).mkdir(parents=True, exist_ok=True)
 import matplotlib.pyplot as plt
 
+DEFAULT_SEED = 42
+
 
 # ---------------------------------------------------------------------------
 # Core strategies (copied from the optimized notebook, condensed for reuse)
@@ -576,15 +578,20 @@ def plot_sample_equities(equity_sets: List[Tuple[str, Dict[str, pd.Series]]], ou
 # ---------------------------------------------------------------------------
 # Entry points
 # ---------------------------------------------------------------------------
-def run_scenarios(num_assets: int = 25, num_days: int = 500, w: int = 30, W_max: int = 30) -> None:
-    base_seed = 42
+def run_scenarios(
+    num_assets: int = 25,
+    num_days: int = 500,
+    w: int = 30,
+    W_max: int = 30,
+    seed: int = DEFAULT_SEED,
+) -> None:
     scenarios = build_scenarios(num_assets=num_assets, num_days=num_days)
     sample_equities: List[Tuple[str, Dict[str, pd.Series]]] = []
     out_dir = Path("results/synthetic")
-    for idx, scen in enumerate(scenarios):
+    for scen in scenarios:
         run = run_single_scenario(
             scen,
-            seed=base_seed + idx,
+            seed=seed,
             w=w,
             W_max=W_max,
             save_data_dir=Path("results/synthetic/data"),
@@ -610,7 +617,7 @@ def main() -> None:
     run_scenarios()
 
     # Richer sweep (small and fast) with exports + plots.
-    seeds = [101, 202, 303]
+    seeds = [DEFAULT_SEED]  # keep all scenarios on a single seed for consistency
     ws = [30]  # match main notebook window choice
     scenarios = build_scenarios(num_assets=25, num_days=600)
     out_dir = Path("results/synthetic")
